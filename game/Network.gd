@@ -64,10 +64,7 @@ func remove_player(peer_id):
 		leave_server()
 		return
 	
-	var players: Array[Node] = get_tree().get_nodes_in_group('Players')
-	var player_to_remove = players.find_custom(func(item): return item.name == str(peer_id))
-	if player_to_remove != -1:
-		players[player_to_remove].queue_free()
+	# todo
 
 func leave_server():
 	if tube_enabled:

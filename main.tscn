@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://yqccmfsj16d3" path="res://countdown/NumLabel.gd" id="4_1bvp3"]
 [ext_resource type="Script" uid="uid://deyrplu4k4bym" path="res://utils/SinRotateParent.gd" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://bfr7o6rp0uifi" path="res://utils/RotateParent.gd" id="6_7mycd"]
+[ext_resource type="Script" uid="uid://7l3cumgpfhb" path="res://countdown/game_over_label.gd" id="8_5vw27"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ig7tw"]
 shader = ExtResource("2_0xm2m")
@@ -31,6 +32,20 @@ line_spacing = -100.0
 font = SubResource("FontVariation_xwu6u")
 font_size = 434
 outline_size = 42
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_272bh"]
+line_spacing = 20.605
+font = SubResource("FontVariation_xwu6u")
+font_size = 130
+outline_size = 26
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5vw27"]
+line_spacing = 80.74
+font = SubResource("FontVariation_xwu6u")
+font_size = 214
+outline_size = 26
 outline_color = Color(0, 0, 0, 1)
 
 [node name="Main" type="Control" unique_id=729654353]
@@ -87,3 +102,65 @@ period2 = 7.9
 [node name="RotateParent" type="Node" parent="NumLabel" unique_id=2045818660]
 script = ExtResource("6_7mycd")
 metadata/_custom_type_script = "uid://bfr7o6rp0uifi"
+
+[node name="GameOverLabel" type="Label" parent="." unique_id=1097667377]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -990.82
+offset_right = 350.0
+offset_bottom = 934.17993
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+text = "GAME OVER"
+label_settings = SubResource("LabelSettings_272bh")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+script = ExtResource("8_5vw27")
+
+[node name="SinRotateParent" type="Node" parent="GameOverLabel" unique_id=780548185]
+script = ExtResource("5_lquwl")
+amp = 18.0
+period = 1.9
+amp2 = 5.0
+period2 = 4.9
+
+[node name="YouWinLabel" type="Label" parent="." unique_id=1090948806]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -990.82
+offset_right = 350.0
+offset_bottom = 934.17993
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+text = "YOU WIN
+!!!"
+label_settings = SubResource("LabelSettings_5vw27")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+script = ExtResource("8_5vw27")
+is_win = true
+
+[node name="SinRotateParent" type="Node" parent="YouWinLabel" unique_id=1482663082]
+script = ExtResource("5_lquwl")
+amp = 18.0
+period = 1.9
+amp2 = 5.0
+period2 = 4.9

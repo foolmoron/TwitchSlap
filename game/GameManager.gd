@@ -2,9 +2,13 @@ extends Node
 
 signal update_count_until_local_player(count: int)
 signal on_hit()
-signal on_game_over()
+signal on_change_state(is_game_over: bool)
 
-var game_over_scene := preload("res://gameover.tscn") as PackedScene
+enum State {
+	Playing,
+	GameOver,
+	YouWin,
+}
 
 @export_range(1, 999) var player_count := 4
 @export_range(0, 999) var player_local_id := 0
@@ -29,24 +33,29 @@ var count_until_local_player := 0:
 @export_range(0.0, 2.0) var player_time_max := 1.2
 @export_range(0.0, 2.0) var player_time_min := 0.3
 
-var is_game_over := false
+var state := State.Playing
 
 func _ready() -> void:
 	player_latest_hit = player_local_id
 	await get_tree().create_timer(0).timeout
 	player_latest_hit = player_local_id
+	on_change_state.emit(state)
 
 func _process(delta: float) -> void:
+	if state != State.Playing:
+		return
 	if count_until_local_player == 0:
 		player_time_remaining -= delta
 		if player_time_remaining < 0.0:
-			do_game_over();
+			change_state(State.GameOver)
 	else:
 		player_time_remaining = player_time_max
 	if stun_time > 0.0:
 		stun_time -= delta
 
 func _input(event: InputEvent) -> void:
+	if state != State.Playing:
+		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			do_hit()
@@ -68,9 +77,8 @@ func do_hit() -> void:
 func do_stun() -> void:
 	stun_time = stun_time_max
 
-func do_game_over() -> void:
-	if is_game_over:
+func change_state(state_new: State) -> void:
+	if state == state_new:
 		return
-	is_game_over = true
-	on_game_over.emit()
-	get_tree().change_scene_to_packed(game_over_scene)
+	state = state_new
+	on_change_state.emit(state_new)

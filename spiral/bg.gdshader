@@ -17,8 +17,8 @@ void fragment() {
 	// Keep a full-screen ColorRect circular at any viewport aspect ratio.
 	float aspect_ratio = SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x;
 	vec2 uv = (UV - 0.5) * vec2(aspect_ratio, 1.0) * scale;
-
-	float radius = length(uv);
+	
+	float radius = max(0.005, length(uv));
 	float angle = atan(uv.y, uv.x);
 	float phase = angle * arms - radius * twist - rotation * arms;
 
@@ -43,6 +43,6 @@ void fragment() {
 	spiral_mask *= 1.0 - step(arm_cutoff, radius);
 
 	vec4 color = mix(background_color, border_color, border_mask);
-	color = mix(color, spiral_color, spiral_mask) * pow(1.0 / radius, 0.25);
+	color = mix(color, spiral_color, spiral_mask) * pow(1.0 / radius, 0.3);
 	COLOR = color;
 }
