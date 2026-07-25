@@ -1,6 +1,34 @@
 [gd_scene format=3 uid="uid://3o8bjkp5hrrd"]
 
 [ext_resource type="Script" uid="uid://h883ly1ldm1r" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="Shader" uid="uid://yfour8f1ufgr" path="res://bg/bg.gdshader" id="2_0xm2m"]
 
-[node name="Node2D" type="Node2D" unique_id=198598140]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ig7tw"]
+shader = ExtResource("2_0xm2m")
+shader_parameter/color_a = Color(0, 0, 0, 1)
+shader_parameter/color_b = Color(0.7615183, 0.10010002, 0.91, 1)
+shader_parameter/color_c = Color(0.7607843, 0.101960786, 0.9098039, 1)
+shader_parameter/rotation_speed = 3.300000496209961
+shader_parameter/arms = 1.0
+shader_parameter/twist = 65.0
+shader_parameter/softness = 0.00999999977648
+shader_parameter/thickness = 0.8399999812243201
+shader_parameter/scale = 0.6999999899416001
+
+[node name="FullScreen" type="Control" unique_id=729654353]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_ig7tw")
+
+[node name="Control" type="ColorRect" parent="." unique_id=634502322]
+material = SubResource("ShaderMaterial_ig7tw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
