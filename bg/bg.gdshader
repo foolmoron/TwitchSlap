@@ -34,7 +34,8 @@ void fragment() {
 	float arm_offset = mod(phase + PI, 2.0 * PI) - PI;
 	float arm_cutoff = arm_radius - arm_radius * arm_radius * twist * arm_offset / (arms * arms + arm_radius * arm_radius * twist * twist);
 
-	float border_drain = max(0.0, min(1.0, drain * 0.998));
+	float drain_ratio = 0.9985;
+	float border_drain = max(0.0, min(1.0, drain * drain_ratio));
 	float border_radius = length(vec2(aspect_ratio, 1.0) * 0.5 * scale) * (1.0 - border_drain);
 	float border_cutoff = border_radius - border_radius * border_radius * twist * arm_offset / (arms * arms + border_radius * border_radius * twist * twist);
 
