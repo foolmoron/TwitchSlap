@@ -7,6 +7,8 @@ enum Lang {
 	Kanji,
 }
 
+var font_sizes_by_lang: Array[int] = [280, 280, 370, 340]
+
 @export var lang: Lang = Lang.Decimal:
 	set(value):
 		lang = value
@@ -15,15 +17,25 @@ enum Lang {
 @export_range(0, 999) var num_current: int = 0:
 	set(value):
 		num_current = value
+		label_settings.font_size = font_sizes_by_lang[lang]
+		print("lang: %d size: %d" % [lang, label_settings.font_size])
 		match lang:
 			Lang.Decimal:
 				text = to_text_decimal(value)
 			Lang.Roman:
 				text = to_text_roman(value)
+			Lang.Devanagari:
+				text = to_text_devanagari(value)
 			Lang.Kanji:
 				text = to_text_kanji(value)
 
-func _ready():
+func _ready() -> void:
+	GameManager.update_count_until_local_player.connect(func(count: int):
+		num_current = count
+	)
+	GameManager.on_hit.connect(func():
+		lang = (lang + randi_range(1, Lang.size() - 1)) % Lang.size() as Lang
+	)
 	num_current = num_current
 
 # Decimal
