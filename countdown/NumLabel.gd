@@ -3,8 +3,8 @@ extends Label
 @onready var rotate: RotateParent = $RotateParent
 @onready var sin_rotate: SinRotateParent = $SinRotateParent
 var rotate_time := 0.0
-var rotate_time_max := 0.25
-var rotate_strength := 16
+var rotate_time_max := 0.22
+var rotate_strength := 14
 
 enum Lang {
 	Decimal,
@@ -24,7 +24,6 @@ var font_sizes_by_lang: Array[int] = [280, 280, 370, 340]
 	set(value):
 		num_current = value
 		label_settings.font_size = font_sizes_by_lang[lang]
-		print("lang: %d size: %d" % [lang, label_settings.font_size])
 		match lang:
 			Lang.Decimal:
 				text = to_text_decimal(value)
@@ -102,8 +101,7 @@ func _process(delta: float) -> void:
 	if rotate_time > 0.0:
 		sin_rotate.process_mode = Node.PROCESS_MODE_DISABLED
 		rotate.process_mode = Node.PROCESS_MODE_INHERIT
-		rotate.speed_deg = rotate_strength * 360.0 * pow(rotate_time / rotate_time_max, 2.5)
-		print(rotate.speed_deg)
+		rotate.speed_deg = rotate_strength * 360.0 * pow(rotate_time / rotate_time_max, 1.7)
 	else:
 		sin_rotate.process_mode = Node.PROCESS_MODE_INHERIT
 		rotate.process_mode = Node.PROCESS_MODE_DISABLED

@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://3o8bjkp5hrrd"]
 
 [ext_resource type="Script" uid="uid://h883ly1ldm1r" path="res://main.gd" id="1_ig7tw"]
-[ext_resource type="Shader" uid="uid://yfour8f1ufgr" path="res://bg/bg.gdshader" id="2_0xm2m"]
+[ext_resource type="Shader" uid="uid://yfour8f1ufgr" path="res://spiral/bg.gdshader" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://db8tyiy1x4e3n" path="res://spiral/Spiral.gd" id="3_272bh"]
 [ext_resource type="FontFile" uid="uid://bywdpnr1vi5nf" path="res://assets/MochiyPopOne-Regular.ttf" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://yqccmfsj16d3" path="res://countdown/NumLabel.gd" id="4_1bvp3"]
 [ext_resource type="Script" uid="uid://deyrplu4k4bym" path="res://utils/SinRotateParent.gd" id="5_lquwl"]
@@ -12,9 +13,9 @@ shader = ExtResource("2_0xm2m")
 shader_parameter/background_color = Color(1, 1, 1, 1)
 shader_parameter/spiral_color = Color(0.95, 0.08, 0.55, 1)
 shader_parameter/border_color = Color(0, 0, 0, 1)
-shader_parameter/rotation_speed = 3.300000496209961
+shader_parameter/rotation = 0.0
 shader_parameter/arms = 1.0
-shader_parameter/twist = 65.0
+shader_parameter/twist = 60.0
 shader_parameter/softness = 0.00999999977648
 shader_parameter/thickness = 0.6999999843536
 shader_parameter/border_thickness = 0.0999999977648
@@ -49,6 +50,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_272bh")
+rotation_speed = 4.310000000000002
 
 [node name="NumLabel" type="Label" parent="." unique_id=392810995]
 custom_minimum_size = Vector2(100, 100)
@@ -76,12 +79,11 @@ num_current = 495
 
 [node name="SinRotateParent" type="Node" parent="NumLabel" unique_id=1684727712]
 script = ExtResource("5_lquwl")
-amp = 3.0
-period = 3.3
-amp2 = 5.0
-period2 = 8.6
+amp = 6.0
+period = 2.5
+amp2 = 3.0
+period2 = 7.9
 
 [node name="RotateParent" type="Node" parent="NumLabel" unique_id=2045818660]
 script = ExtResource("6_7mycd")
-speed_rad = 0.0
 metadata/_custom_type_script = "uid://bfr7o6rp0uifi"

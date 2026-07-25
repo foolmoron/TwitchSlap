@@ -4,7 +4,7 @@ uniform vec4 background_color : source_color = vec4(0.035, 0.008, 0.12, 1.0);
 uniform vec4 spiral_color : source_color = vec4(0.95, 0.08, 0.55, 1.0);
 uniform vec4 border_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
 
-uniform float rotation_speed : hint_range(-30.0, 30.0, 0.1) = 0.35;
+uniform float rotation : hint_range(0.0, 360.0, 1.0) = 0;
 uniform float arms : hint_range(1.0, 12.0, 1.0) = 5.0;
 uniform float twist : hint_range(1.0, 200.0, 1) = 9.0;
 uniform float softness : hint_range(0.01, 0.49, 0.01) = 0.18;
@@ -20,7 +20,7 @@ void fragment() {
 
 	float radius = length(uv);
 	float angle = atan(uv.y, uv.x);
-	float phase = angle * arms - radius * twist - TIME * rotation_speed * arms;
+	float phase = angle * arms - radius * twist - rotation * arms;
 
 	// Draw a wider black mask underneath each spiral arm.
 	float wave = 0.5 + 0.5 * cos(phase);
@@ -43,6 +43,6 @@ void fragment() {
 	spiral_mask *= 1.0 - step(arm_cutoff, radius);
 
 	vec4 color = mix(background_color, border_color, border_mask);
-	color = mix(color, spiral_color, spiral_mask);
+	color = mix(color, spiral_color, spiral_mask) * pow(1.0 / radius, 0.25);
 	COLOR = color;
 }

@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://b0bh2cbxl67xa"]
+
+[ext_resource type="Script" uid="uid://h883ly1ldm1r" path="res://main.gd" id="1_k2vha"]
+[ext_resource type="FontFile" uid="uid://bywdpnr1vi5nf" path="res://assets/MochiyPopOne-Regular.ttf" id="4_woa3c"]
+[ext_resource type="Script" uid="uid://deyrplu4k4bym" path="res://utils/SinRotateParent.gd" id="6_ku74v"]
+
+[sub_resource type="FontVariation" id="FontVariation_xwu6u"]
+base_font = ExtResource("4_woa3c")
+spacing_glyph = 22
+
+[sub_resource type="LabelSettings" id="LabelSettings_eeur3"]
+line_spacing = 15.86
+font = SubResource("FontVariation_xwu6u")
+font_size = 129
+outline_size = 42
+outline_color = Color(0, 0, 0, 1)
+
+[node name="GameOver" type="Control" unique_id=729654353]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k2vha")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=209058782]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="NumLabel" type="Label" parent="." unique_id=392810995]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -990.82
+offset_right = 350.0
+offset_bottom = 934.17993
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+text = "GAME
+OVER"
+label_settings = SubResource("LabelSettings_eeur3")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="SinRotateParent" type="Node" parent="NumLabel" unique_id=1684727712]
+script = ExtResource("6_ku74v")
+amp = 6.0
+period = 2.5
+amp2 = 3.0
+period2 = 7.9
