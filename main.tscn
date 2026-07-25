@@ -3,7 +3,8 @@
 [ext_resource type="Script" uid="uid://h883ly1ldm1r" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Shader" uid="uid://yfour8f1ufgr" path="res://bg/bg.gdshader" id="2_0xm2m"]
 [ext_resource type="FontFile" uid="uid://bywdpnr1vi5nf" path="res://assets/MochiyPopOne-Regular.ttf" id="3_h2yge"]
-[ext_resource type="Script" uid="uid://yqccmfsj16d3" path="res://countdown/num_label.gd" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://yqccmfsj16d3" path="res://countdown/NumLabel.gd" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://deyrplu4k4bym" path="res://utils/SinRotateParent.gd" id="5_lquwl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ig7tw"]
 shader = ExtResource("2_0xm2m")
@@ -25,7 +26,7 @@ font_size = 280
 outline_size = 42
 outline_color = Color(0, 0, 0, 1)
 
-[node name="FullScreen" type="Control" unique_id=729654353]
+[node name="Main" type="Control" unique_id=729654353]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -69,3 +70,10 @@ autowrap_mode = 3
 script = ExtResource("4_1bvp3")
 lang = 1
 num_current = 495
+
+[node name="SinRotateParent" type="Node" parent="NumLabel" unique_id=1684727712]
+script = ExtResource("5_lquwl")
+amp = 3.0
+period = 3.3
+amp2 = 5.0
+period2 = 8.6
