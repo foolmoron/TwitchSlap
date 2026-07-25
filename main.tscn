@@ -2,18 +2,26 @@
 
 [ext_resource type="Script" uid="uid://h883ly1ldm1r" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Shader" uid="uid://yfour8f1ufgr" path="res://bg/bg.gdshader" id="2_0xm2m"]
+[ext_resource type="FontFile" uid="uid://bywdpnr1vi5nf" path="res://assets/MochiyPopOne-Regular.ttf" id="3_h2yge"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ig7tw"]
 shader = ExtResource("2_0xm2m")
-shader_parameter/color_a = Color(0, 0, 0, 1)
-shader_parameter/color_b = Color(0.7615183, 0.10010002, 0.91, 1)
-shader_parameter/color_c = Color(0.7607843, 0.101960786, 0.9098039, 1)
+shader_parameter/background_color = Color(1, 1, 1, 1)
+shader_parameter/spiral_color = Color(0.95, 0.08, 0.55, 1)
+shader_parameter/border_color = Color(0, 0, 0, 1)
 shader_parameter/rotation_speed = 3.300000496209961
 shader_parameter/arms = 1.0
 shader_parameter/twist = 65.0
 shader_parameter/softness = 0.00999999977648
-shader_parameter/thickness = 0.8399999812243201
+shader_parameter/thickness = 0.6999999843536
+shader_parameter/border_thickness = 0.0999999977648
 shader_parameter/scale = 0.6999999899416001
+
+[sub_resource type="LabelSettings" id="LabelSettings_w6llf"]
+font = ExtResource("3_h2yge")
+font_size = 285
+outline_size = 42
+outline_color = Color(0, 0, 0, 1)
 
 [node name="FullScreen" type="Control" unique_id=729654353]
 layout_mode = 3
@@ -32,3 +40,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Countdown" type="Label" parent="." unique_id=392810995]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "五"
+label_settings = SubResource("LabelSettings_w6llf")
