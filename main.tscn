@@ -18,6 +18,7 @@ shader_parameter/softness = 0.00999999977648
 shader_parameter/thickness = 0.6999999843536
 shader_parameter/border_thickness = 0.0999999977648
 shader_parameter/scale = 0.6999999899416001
+shader_parameter/drain = 0.0
 
 [sub_resource type="FontVariation" id="FontVariation_xwu6u"]
 base_font = ExtResource("3_h2yge")
