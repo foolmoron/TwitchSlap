@@ -5,6 +5,7 @@
 [ext_resource type="FontFile" uid="uid://bywdpnr1vi5nf" path="res://assets/MochiyPopOne-Regular.ttf" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://yqccmfsj16d3" path="res://countdown/NumLabel.gd" id="4_1bvp3"]
 [ext_resource type="Script" uid="uid://deyrplu4k4bym" path="res://utils/SinRotateParent.gd" id="5_lquwl"]
+[ext_resource type="Script" uid="uid://bfr7o6rp0uifi" path="res://utils/RotateParent.gd" id="6_7mycd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ig7tw"]
 shader = ExtResource("2_0xm2m")
@@ -79,3 +80,8 @@ amp = 3.0
 period = 3.3
 amp2 = 5.0
 period2 = 8.6
+
+[node name="RotateParent" type="Node" parent="NumLabel" unique_id=2045818660]
+script = ExtResource("6_7mycd")
+speed_rad = 0.0
+metadata/_custom_type_script = "uid://bfr7o6rp0uifi"

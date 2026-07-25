@@ -14,4 +14,5 @@ var time := 0.0
 
 func _process(delta: float) -> void:
 	time += delta
-	parent.rotation = rot_initial + deg_to_rad(amp) * sin(time * TAU / period) + deg_to_rad(amp2) * sin(time * TAU / period2)
+	var target_rot := rot_initial + deg_to_rad(amp) * sin(time * TAU / period) + deg_to_rad(amp2) * sin(time * TAU / period2)
+	parent.rotation = lerp_angle(parent.rotation, target_rot, 0.15)

@@ -1,5 +1,11 @@
 extends Label
 
+@onready var rotate: RotateParent = $RotateParent
+@onready var sin_rotate: SinRotateParent = $SinRotateParent
+var rotate_time := 0.0
+var rotate_time_max := 0.25
+var rotate_strength := 16
+
 enum Lang {
 	Decimal,
 	Roman,
@@ -32,6 +38,7 @@ var font_sizes_by_lang: Array[int] = [280, 280, 370, 340]
 func _ready() -> void:
 	GameManager.update_count_until_local_player.connect(func(count: int):
 		num_current = count
+		rotate_time = rotate_time_max
 	)
 	GameManager.on_hit.connect(func():
 		lang = (lang + randi_range(1, Lang.size() - 1)) % Lang.size() as Lang
@@ -88,3 +95,15 @@ func to_text_kanji(value: int) -> String:
 	if ones > 0:
 		t += nums_kanji[ones]
 	return "\n".join(t.split(""))
+
+# etc
+func _process(delta: float) -> void:
+	rotate_time -= delta
+	if rotate_time > 0.0:
+		sin_rotate.process_mode = Node.PROCESS_MODE_DISABLED
+		rotate.process_mode = Node.PROCESS_MODE_INHERIT
+		rotate.speed_deg = rotate_strength * 360.0 * pow(rotate_time / rotate_time_max, 2.5)
+		print(rotate.speed_deg)
+	else:
+		sin_rotate.process_mode = Node.PROCESS_MODE_INHERIT
+		rotate.process_mode = Node.PROCESS_MODE_DISABLED
