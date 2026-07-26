@@ -333,7 +333,7 @@ func _on_session_left() -> void:
 func _on_tube_error(_code: int, message: String) -> void:
 	if tube_client.state == TubeClient.State.IDLE or tube_client.state == TubeClient.State.JOINING_SESSION:
 		session_connected = false
-	if "refus" in message.to_lower() or "join" in message.to_lower():
+	if "refus" in message.to_lower():
 		session_failed.emit("Game already started.")
 	else:
 		session_failed.emit(message)

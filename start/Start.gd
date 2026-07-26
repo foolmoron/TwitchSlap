@@ -46,11 +46,11 @@ func _open_lobby() -> void:
 	lobby.visible = true
 	if session_id.is_empty():
 		session_id = Network.tube_create()
-		print("Join session link: %s" % _get_join_url(session_id))
 	else:
 		Network.tube_join(session_id)
 	var join_url := _get_join_url(session_id)
 	qr_code.data = join_url
+	print("Join session link: %s" % join_url)
 	status_label.text = "Connecting..."
 
 func _get_requested_session() -> String:

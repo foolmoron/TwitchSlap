@@ -28,12 +28,14 @@ func _process(delta: float) -> void:
 		shader.set_shader_parameter("drain", drain if GameManager.count_until_local_player == 0 else 0.0)
 		shader.set_shader_parameter("twist", twist_orig * progression)
 		shader.set_shader_parameter("thickness", thickness_orig * progression)
+		GameManager.background_music.pitch_scale = lerp(2.0, 0.8, progression)
 	else:
 		rot = fmod(rot + (0.0 if GameManager.state == GameManager.State.GameOver else rotation_speed) * delta, TAU)
 		shader.set_shader_parameter("rotation", rot)
 		shader.set_shader_parameter("drain", 1.0 if GameManager.state == GameManager.State.GameOver else 0.0)
 		shader.set_shader_parameter("twist", twist_orig)
 		shader.set_shader_parameter("thickness", thickness_orig)
+		GameManager.background_music.pitch_scale = 1.0
 
 	var bg := background_color_orig
 	if GameManager.state == GameManager.State.GameOver:

@@ -1,5 +1,9 @@
 extends Node
 
+const BACKGROUND_MUSIC_STREAM: AudioStreamMP3 = preload(
+	"res://assets/Pshychedelia_Sketch_Final.mp3"
+)
+
 signal update_count_until_local_player(count: int)
 signal on_hit()
 signal on_change_state(is_game_over: bool)
@@ -40,6 +44,8 @@ var alive_seats: Array[int] = []
 var active_seat := -1
 var active_deadline_ms := 0
 
+var background_music := AudioStreamPlayer.new()
+
 var _match_start_ms := 0
 var _initial_time_max := 1.2
 var _baseline_active := -1
@@ -50,6 +56,13 @@ var _confirmed_hits_by_seat: Dictionary = {}
 var _hit_events: Array[Dictionary] = []
 var _accepted_hit_keys: Dictionary = {}
 var _pending_local_timeout := false
+var _touch_released := false
+
+func _ready() -> void:
+	background_music.name = "BGM"
+	background_music.stream = BACKGROUND_MUSIC_STREAM
+	add_child(background_music)
+	background_music.play()
 
 func configure_match(
 		new_match_id: String,
@@ -86,6 +99,7 @@ func configure_match(
 	_hit_events.clear()
 	_accepted_hit_keys.clear()
 	_pending_local_timeout = false
+	_touch_released = false
 	stun_time = 0.0
 	_update_local_turn()
 	change_state(State.Playing)
@@ -207,7 +221,9 @@ func get_player_confirmed_hits_count() -> int:
 	return int(_confirmed_hits_by_seat.get(player_local_id, 0))
 
 func _process(delta: float) -> void:
-	if is_stunned():
+	if _touch_released:
+		stun_time = stun_time_max
+	elif is_stunned():
 		stun_time = maxf(0.0, stun_time - delta)
 	if state != State.Playing or active_seat < 0:
 		return
@@ -219,6 +235,9 @@ func _process(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if state != State.Playing:
+		return
+	if event is InputEventScreenTouch:
+		_touch_released = not event.pressed
 		return
 	if OS.get_name() != "Web":
 		var pressed: bool = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed

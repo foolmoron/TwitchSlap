@@ -25,7 +25,7 @@ func _ready() -> void:
 	GameManager.on_change_state.connect(_on_state_changed)
 
 func _process(_delta: float) -> void:
-	var stunned := (
+	var stunned: bool = (
 		GameManager.state == GameManager.State.Playing
 		and GameManager.is_stunned()
 	)

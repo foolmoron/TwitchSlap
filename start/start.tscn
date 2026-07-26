@@ -150,7 +150,6 @@ label_settings = SubResource("LabelSettings_hqiu3")
 horizontal_alignment = 1
 
 [node name="Lobby" type="VBoxContainer" parent="." unique_id=615098791]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -166,15 +165,17 @@ alignment = 1
 [node name="PlayersLabel" type="Label" parent="Lobby" unique_id=1386867365]
 custom_minimum_size = Vector2(0, 163.12)
 layout_mode = 2
-text = "Players ready: 10/11"
+text = "Players ready: ..."
 label_settings = SubResource("LabelSettings_lobby")
 horizontal_alignment = 1
 
 [node name="QRInstructionLabel" type="Label" parent="Lobby" unique_id=1068011983]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 text = "Get others to join by scanning the code"
 label_settings = SubResource("LabelSettings_small")
 horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="QRCodeRect" type="TextureRect" parent="Lobby" unique_id=2104476961]
 custom_minimum_size = Vector2(500, 500)
@@ -183,10 +184,11 @@ expand_mode = 1
 stretch_mode = 5
 script = ExtResource("5_s0q5u")
 auto_update = true
-mode = 2
-error_correction = 2
-use_eci = false
-data = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789"
+mode = 4
+error_correction = 0
+use_eci = true
+eci_value = 3
+data = ""
 auto_version = true
 auto_mask_pattern = true
 light_module_color = Color(1, 1, 1, 1)
