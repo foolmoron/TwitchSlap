@@ -155,7 +155,7 @@ var refuse_new_connections: bool = false:
 var _local_signaling_peer: TubeLocalSignalingPeer
 var _trackers: Array[TubeTracker] = []
 var _peers: Dictionary[int, TubePeer] = {}
-var _upnp := TubeUPNP.new()
+var _upnp: TubeUPNP
 
 
 func _raise_error(p_code: int, p_message: String):
@@ -164,6 +164,9 @@ func _raise_error(p_code: int, p_message: String):
 
 
 func _ready() -> void:
+	if OS.get_name() != "Web":
+		_upnp = TubeUPNP.new()
+
 	var node_path := NodePath()
 	if is_instance_valid(multiplayer_root_node):
 		node_path = multiplayer_root_node.get_path()
@@ -322,7 +325,8 @@ func _terminate_signaling():
 
 func _terminate_session():
 	state = State.IDLE
-	_upnp.clear_port_mapping()
+	if _upnp:
+		_upnp.clear_port_mapping()
 	
 	if null != _local_signaling_peer:
 		_local_signaling_peer.close()
@@ -656,9 +660,10 @@ func _initiate_peer(p_peer_id: int) -> TubePeer:
 	peer.closed.connect(
 		_on_peer_closed.bind(peer)
 	)
-	peer.port_mapped.connect(
-		_upnp.add_port_mapping
-	)
+	if _upnp:
+		peer.port_mapped.connect(
+			_upnp.add_port_mapping
+		)
 	
 	_peers[p_peer_id] = peer
 	_peer_initiated.emit(peer)
@@ -682,8 +687,9 @@ func _clean_peer(p_peer: TubePeer):
 	if multiplayer_peer.has_peer(p_peer.id):
 		multiplayer_peer.remove_peer(p_peer.id)
 	
-	for port in p_peer.mapped_ports:
-		_upnp.delete_port_mapping(port)
+	if _upnp:
+		for port in p_peer.mapped_ports:
+			_upnp.delete_port_mapping(port)
 	
 	#if _peers.has(p_peer.id): # garbage collected
 		#_peers.erase(p_peer.id)

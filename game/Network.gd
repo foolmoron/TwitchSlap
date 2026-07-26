@@ -12,6 +12,7 @@ var new_http_client := HTTPRequest.new()
 
 var PORT = 9999
 var IP_ADDRESS = '127.0.0.1'
+const TURN_API_URL = "https://api.androodev.com/turn"
 
 func _ready() -> void:
 	new_http_client.request_completed.connect(_on_request_completed)
@@ -25,11 +26,12 @@ func _ready() -> void:
 	if turn_enabled:
 		set_turn_enabled(true)
 
-func tube_create():
+func tube_create() -> String:
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(remove_player)
 	tube_client.create_session()
 	add_player(1)
+	return tube_client.session_id
 
 func tube_join(session_id: String):
 	multiplayer.peer_connected.connect(add_player)
@@ -86,10 +88,18 @@ func _exit_tree() -> void:
 
 var temp_ice: Dictionary
 
-func _on_request_completed(_result, _response_code, _headers, body):
-	var response: Dictionary = JSON.parse_string(body.get_string_from_utf8())
+func _on_request_completed(result, response_code, _headers, body):
+	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
+		push_warning("TURN request failed (result: %s, HTTP: %s)" % [result, response_code])
+		return
 
-	if response and response.has("iceServers"):
+	var parsed_response = JSON.parse_string(body.get_string_from_utf8())
+	if not parsed_response is Dictionary:
+		push_warning("TURN request returned invalid JSON")
+		return
+	var response: Dictionary = parsed_response
+
+	if response.has("iceServers"):
 		temp_ice = response["iceServers"][1]
 		tube_client.context.turn_servers.append(temp_ice)
 		prints("DEBUG", tube_client.context.turn_servers)
@@ -99,4 +109,7 @@ func set_turn_enabled(is_enabled: bool):
 	if is_enabled and temp_ice:
 		tube_client.context.turn_servers.append(temp_ice)
 	elif is_enabled:
-		new_http_client.request("https://api.androodev.com/turn")
+		var turn_url := TURN_API_URL
+		if OS.get_name() == "Web":
+			turn_url = str(JavaScriptBridge.eval("window.location.origin")) + "/turn"
+		new_http_client.request(turn_url)

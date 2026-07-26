@@ -4,6 +4,7 @@
 [ext_resource type="Shader" uid="uid://yfour8f1ufgr" path="res://spiral/bg.gdshader" id="2_s0q5u"]
 [ext_resource type="Script" uid="uid://db8tyiy1x4e3n" path="res://spiral/Spiral.gd" id="3_hqiu3"]
 [ext_resource type="FontFile" uid="uid://bywdpnr1vi5nf" path="res://assets/MochiyPopOne-Regular.ttf" id="4_masxb"]
+[ext_resource type="Script" uid="uid://dynulhnyq5hpq" path="res://addons/kenyoni/qr_code/qr_code_rect.gd" id="5_s0q5u"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_spiral"]
 shader = ExtResource("2_s0q5u")
@@ -104,3 +105,32 @@ label_settings = SubResource("LabelSettings_1n0d2")
 horizontal_alignment = 1
 vertical_alignment = 2
 autowrap_mode = 2
+
+[node name="QRCodeRect" type="TextureRect" parent="." unique_id=2104476961]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("5_s0q5u")
+auto_update = true
+mode = 2
+error_correction = 2
+use_eci = false
+data = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789"
+auto_version = true
+auto_mask_pattern = true
+light_module_color = Color(1, 1, 1, 1)
+dark_module_color = Color(0, 0, 0, 1)
+auto_module_size = true
+quiet_zone_size = 1
