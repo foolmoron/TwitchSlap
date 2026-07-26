@@ -38,8 +38,9 @@ func _ready() -> void:
 	if tube_enabled:
 		tube_client.context = TUBE_CONTEXT
 		tube_client.multiplayer_root_node = get_tree().root
-		tube_client.peer_signaling_timeout = 5.0
-		tube_client.peer_signaling_max_attempts = 6
+		tube_client.peer_signaling_timeout = 1.0
+		tube_client.peer_signaling_max_attempts = 5
+		tube_client._peer_initiated.connect(_on_tube_peer_initiated)
 		tube_client.session_created.connect(_on_session_opened)
 		tube_client.session_joined.connect(_on_session_opened)
 		tube_client.peer_refused.connect(_on_peer_refused)
@@ -47,6 +48,12 @@ func _ready() -> void:
 		tube_client.error_raised.connect(_on_tube_error)
 		get_tree().root.add_child.call_deferred(tube_client)
 	await get_tree().create_timer(0).timeout
+
+func _on_tube_peer_initiated(peer: TubePeer) -> void:
+	peer.signaling_timeout.connect(_double_peer_signaling_timeout.bind(peer))
+
+func _double_peer_signaling_timeout(peer: TubePeer) -> void:
+	peer.signaling_timeout_time *= 2.0
 
 func prepare_turn() -> bool:
 	tube_client.context.turn_servers.clear()
