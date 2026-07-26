@@ -11,3 +11,4 @@ func _ready():
 		elif self.is_inside_tree():
 			parent.remove_child(self)
 	)
+	parent.remove_child.call_deferred(self)
