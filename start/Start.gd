@@ -100,7 +100,9 @@ func _request_web_permissions() -> void:
 
 func _on_lobby_updated(player_count: int, ready_count: int) -> void:
 	players_label.text = "Players ready: %d/%d" % [ready_count, player_count]
-	if player_count > 0 and ready_count == player_count:
+	if player_count < 2:
+		status_label.text = "At least 2 players are required!"
+	elif ready_count == player_count:
 		status_label.text = "Everyone is ready! Starting..."
 	else:
 		status_label.text = "Hold your thumb on the screen to ready!"
@@ -109,5 +111,4 @@ func _on_session_failed(message: String) -> void:
 	status_label.text = "Could not connect: " + message
 
 func _on_game_starting() -> void:
-	GameManager.change_state(GameManager.State.Playing)
 	get_tree().change_scene_to_packed(main_scene)
