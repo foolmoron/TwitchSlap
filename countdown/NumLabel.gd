@@ -38,7 +38,7 @@ func _ready() -> void:
 		num_current = count
 		rotate_time = rotate_time_max
 	)
-	GameManager.on_hit.connect(func():
+	GameManager.on_hit.connect(func(_seat_id: int):
 		lang = (lang + randi_range(1, Lang.size() - 1)) % Lang.size() as Lang
 	)
 	num_current = GameManager.count_until_local_player

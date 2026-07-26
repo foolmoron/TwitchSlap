@@ -39,9 +39,10 @@ func _process(_delta: float) -> void:
 		_stun_player.play()
 	_was_stunned = stunned
 
-func _on_hit() -> void:
+func _on_hit(seat_id: int) -> void:
 	_play_one_shot(_hit_player, hit_sfx)
-	_vibrate(120)
+	if seat_id == GameManager.player_local_id:
+		_vibrate(120)
 
 func _start_stun_feedback() -> void:
 	_play_one_shot(_stun_player, stun_sfx)

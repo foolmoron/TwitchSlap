@@ -5,7 +5,7 @@ const BACKGROUND_MUSIC_STREAM: AudioStreamMP3 = preload(
 )
 
 signal update_count_until_local_player(count: int)
-signal on_hit()
+signal on_hit(seat_id: int)
 signal on_change_state(is_game_over: bool)
 signal player_removed(seat_id: int)
 signal winner_declared(seat_id: int)
@@ -156,10 +156,11 @@ func _reconcile_hits() -> void:
 		replay_active = _next_in(seat_id, replay_alive)
 		replay_deadline = timestamp_ms + roundi(replay_time_max * 1000.0)
 
-	var newly_accepted := 0
-	for key in accepted:
-		if not _accepted_hit_keys.has(key):
-			newly_accepted += 1
+	var newly_accepted_seats: Array[int] = []
+	for event in _hit_events:
+		var key: String = event["key"]
+		if accepted.has(key) and not _accepted_hit_keys.has(key):
+			newly_accepted_seats.append(event["seat"])
 	_accepted_hit_keys = accepted
 	_confirmed_hits_by_seat = confirmed_hits
 	player_latest_hit = replay_latest
@@ -170,8 +171,8 @@ func _reconcile_hits() -> void:
 	if state == State.GameOver and alive_seats.has(player_local_id):
 		change_state(State.Playing)
 	_update_local_turn()
-	for _i in newly_accepted:
-		on_hit.emit()
+	for seat_id in newly_accepted_seats:
+		on_hit.emit(seat_id)
 
 func remove_player(seat_id: int, _timestamp_ms: int) -> void:
 	if not alive_seats.has(seat_id):
