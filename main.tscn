@@ -41,6 +41,17 @@ font_size = 130
 outline_size = 39
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="FontVariation" id="FontVariation_5vw27"]
+base_font = ExtResource("3_h2yge")
+spacing_glyph = 9
+
+[sub_resource type="LabelSettings" id="LabelSettings_kek77"]
+line_spacing = 80.74
+font = SubResource("FontVariation_5vw27")
+font_size = 48
+outline_size = 23
+outline_color = Color(0, 0, 0, 1)
+
 [sub_resource type="LabelSettings" id="LabelSettings_5vw27"]
 line_spacing = 80.74
 font = SubResource("FontVariation_xwu6u")
@@ -112,9 +123,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -350.0
-offset_top = -990.82
+offset_top = -760.0
 offset_right = 350.0
-offset_bottom = 934.17993
+offset_bottom = 760.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
@@ -124,6 +135,22 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("8_5vw27")
+
+[node name="CountLabel" type="Label" parent="GameOverLabel" unique_id=1474237792]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -287.0
+offset_top = -216.0
+offset_right = 287.0
+offset_bottom = -146.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "After 999 Slaps"
+label_settings = SubResource("LabelSettings_kek77")
 
 [node name="SinRotateParent" type="Node" parent="GameOverLabel" unique_id=780548185]
 script = ExtResource("5_lquwl")
@@ -141,9 +168,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -350.0
-offset_top = -990.82
+offset_top = -760.0
 offset_right = 350.0
-offset_bottom = 934.17993
+offset_bottom = 760.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
@@ -155,6 +182,22 @@ vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("8_5vw27")
 is_win = true
+
+[node name="CountLabel" type="Label" parent="YouWinLabel" unique_id=1511556067]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -287.0
+offset_top = -216.0
+offset_right = 287.0
+offset_bottom = -146.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "After 999 Slaps"
+label_settings = SubResource("LabelSettings_kek77")
 
 [node name="SinRotateParent" type="Node" parent="YouWinLabel" unique_id=1482663082]
 script = ExtResource("5_lquwl")
