@@ -68,6 +68,20 @@ func _request_web_permissions() -> void:
 	if OS.get_name() != "Web":
 		return
 	JavaScriptBridge.eval("""
+		(() => {
+			const fullscreenTarget = document.documentElement;
+			const requestFullscreen =
+				fullscreenTarget.requestFullscreen ||
+				fullscreenTarget.webkitRequestFullscreen;
+			if (!document.fullscreenElement &&
+				!document.webkitFullscreenElement &&
+				requestFullscreen) {
+				const fullscreenRequest = requestFullscreen.call(fullscreenTarget);
+				if (fullscreenRequest && fullscreenRequest.catch)
+					fullscreenRequest.catch((error) =>
+						console.warn('TwitchSlap fullscreen request:', error));
+			}
+		})();
 		(async () => {
 			try {
 				if (typeof DeviceMotionEvent !== 'undefined' &&
