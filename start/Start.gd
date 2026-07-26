@@ -44,6 +44,12 @@ func _open_lobby() -> void:
 	_request_web_permissions()
 	intro.visible = false
 	lobby.visible = true
+	status_label.text = "Preparing relay..."
+	if not await Network.prepare_turn():
+		in_lobby = false
+		status_label.text = "Could not obtain relay credentials. Tap to retry."
+		return
+	status_label.text = "Connecting..."
 	if session_id.is_empty():
 		session_id = Network.tube_create()
 	else:
@@ -51,7 +57,6 @@ func _open_lobby() -> void:
 	var join_url := _get_join_url(session_id)
 	qr_code.data = join_url
 	print("Join session link: %s" % join_url)
-	status_label.text = "Connecting..."
 
 func _get_requested_session() -> String:
 	if OS.get_name() != "Web":

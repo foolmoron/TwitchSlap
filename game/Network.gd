@@ -13,7 +13,6 @@ signal game_starting
 var enet_peer := ENetMultiplayerPeer.new()
 var tube_client := TubeClient.new()
 var tube_enabled := true
-var turn_enabled := false: set = set_turn_enabled
 var new_http_client := HTTPRequest.new()
 
 var PORT = 9999
@@ -34,11 +33,13 @@ var _client_host_offset_ms := 0
 var _winner_sent := false
 
 func _ready() -> void:
-	new_http_client.request_completed.connect(_on_request_completed)
+	new_http_client.timeout = 10.0
 	get_tree().root.add_child.call_deferred(new_http_client)
 	if tube_enabled:
 		tube_client.context = TUBE_CONTEXT
 		tube_client.multiplayer_root_node = get_tree().root
+		tube_client.peer_signaling_timeout = 5.0
+		tube_client.peer_signaling_max_attempts = 6
 		tube_client.session_created.connect(_on_session_opened)
 		tube_client.session_joined.connect(_on_session_opened)
 		tube_client.peer_refused.connect(_on_peer_refused)
@@ -46,8 +47,77 @@ func _ready() -> void:
 		tube_client.error_raised.connect(_on_tube_error)
 		get_tree().root.add_child.call_deferred(tube_client)
 	await get_tree().create_timer(0).timeout
-	if turn_enabled:
-		set_turn_enabled(true)
+
+func prepare_turn() -> bool:
+	tube_client.context.turn_servers.clear()
+	var request_error := new_http_client.request(TURN_API_URL)
+	if request_error != OK:
+		push_warning("TURN request could not start: %s" % error_string(request_error))
+		return false
+
+	var completed: Array = await new_http_client.request_completed
+	var result: int = completed[0]
+	var response_code: int = completed[1]
+	var body: PackedByteArray = completed[3]
+	if result != HTTPRequest.RESULT_SUCCESS:
+		push_warning("TURN request failed: %s" % _http_result_string(result))
+		return false
+	if response_code < 200 or response_code >= 300:
+		push_warning("TURN request returned HTTP %d" % response_code)
+		return false
+
+	var parsed_response = JSON.parse_string(body.get_string_from_utf8())
+	if not parsed_response is Dictionary:
+		push_warning("TURN request returned invalid JSON")
+		return false
+	var response: Dictionary = parsed_response
+	if not response.get("iceServers") is Array:
+		push_warning("TURN response is missing an iceServers array")
+		return false
+
+	var seen_servers: Dictionary = {}
+	for server_value in response["iceServers"]:
+		if not server_value is Dictionary:
+			continue
+		var server: Dictionary = server_value
+		var turn_urls := _validated_turn_urls(server.get("urls"))
+		var username := str(server.get("username", ""))
+		var credential := str(server.get("credential", ""))
+		if turn_urls.is_empty() or username.is_empty() or credential.is_empty():
+			continue
+		var signature := "%s|%s" % [str(turn_urls), username]
+		if seen_servers.has(signature):
+			continue
+		seen_servers[signature] = true
+		tube_client.context.turn_servers.append({
+			"urls": turn_urls[0] if turn_urls.size() == 1 else turn_urls,
+			"username": username,
+			"credential": credential,
+		})
+
+	if tube_client.context.turn_servers.is_empty():
+		push_warning("TURN response contained no valid authenticated TURN servers")
+		return false
+	print("TURN ready: loaded %d relay server configuration(s)" % tube_client.context.turn_servers.size())
+	return true
+
+func _validated_turn_urls(urls_value: Variant) -> Array[String]:
+	var candidates: Array = []
+	if urls_value is String:
+		candidates.append(urls_value)
+	elif urls_value is Array or urls_value is PackedStringArray:
+		candidates.assign(urls_value)
+	var valid_urls: Array[String] = []
+	for candidate in candidates:
+		var url := str(candidate).strip_edges()
+		if url.begins_with("turn:") or url.begins_with("turns:"):
+			valid_urls.append(url)
+	return valid_urls
+
+func _http_result_string(result: int) -> String:
+	if result == HTTPRequest.RESULT_TIMEOUT:
+		return "request timed out"
+	return "result %d" % result
 
 func tube_create() -> String:
 	_connect_multiplayer_signals()
@@ -359,28 +429,3 @@ func clean_up_signals() -> void:
 func _exit_tree() -> void:
 	if tube_enabled:
 		tube_client.leave_session()
-
-var temp_ice: Dictionary
-
-func _on_request_completed(result, response_code, _headers, body) -> void:
-	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
-		push_warning("TURN request failed (result: %s, HTTP: %s)" % [result, response_code])
-		return
-	var parsed_response = JSON.parse_string(body.get_string_from_utf8())
-	if not parsed_response is Dictionary:
-		push_warning("TURN request returned invalid JSON")
-		return
-	var response: Dictionary = parsed_response
-	if response.has("iceServers"):
-		temp_ice = response["iceServers"][1]
-		tube_client.context.turn_servers.append(temp_ice)
-
-func set_turn_enabled(is_enabled: bool) -> void:
-	tube_client.context.turn_servers.clear()
-	if is_enabled and temp_ice:
-		tube_client.context.turn_servers.append(temp_ice)
-	elif is_enabled:
-		var turn_url := TURN_API_URL
-		if OS.get_name() == "Web":
-			turn_url = str(JavaScriptBridge.eval("window.location.origin")) + "/turn"
-		new_http_client.request(turn_url)

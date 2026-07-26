@@ -96,6 +96,7 @@ var local_address: String
 var local_session_description := {} 
 var remote_session_description := {}
 var ice_candidates: Array[Dictionary] = []
+var remote_ice_candidate_keys: Dictionary = {}
 var has_joined_session := false # set by client
 
 var pending_public_ports: Array[int] = []
@@ -189,7 +190,7 @@ func _set_local_description(p_type: String, p_sdp: String):
 	}
 	session_description_created.emit()
 	
-	if is_signaling_ready() and not is_attempting_connection():
+	if is_signaling_ready():
 		match_remaining_ports()
 		signaling_readied.emit()
 	
@@ -225,7 +226,7 @@ func _on_ice_candidate_created(p_media: String, p_index: int, p_sdp: String):
 	
 	ice_candidate_created.emit()
 	
-	if is_signaling_ready() and not is_attempting_connection():
+	if is_signaling_ready():
 		match_remaining_ports()
 		signaling_readied.emit()
 
@@ -248,6 +249,9 @@ func _set_remote_description(p_type: String, p_sdp: String) -> Error:
 
 
 func _add_ice_candidate(media: String, index: int, name: String) -> Error:
+	var candidate_key := "%s|%d|%s" % [media, index, name]
+	if remote_ice_candidate_keys.has(candidate_key):
+		return OK
 	var error = connection.add_ice_candidate(
 		media,
 		index,
@@ -261,6 +265,7 @@ func _add_ice_candidate(media: String, index: int, name: String) -> Error:
 		}))
 		return error
 	
+	remote_ice_candidate_keys[candidate_key] = true
 	ice_candidate_added.emit({
 		"media": media,
 		"index": index,
@@ -293,7 +298,7 @@ func is_signaling_ready() -> bool:
 	if ice_candidates.is_empty():
 		return false
 	
-	return WebRTCPeerConnection.GATHERING_STATE_COMPLETE == connection.get_gathering_state()
+	return true
 
 
 func start_connection_attempt():

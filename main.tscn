@@ -155,6 +155,8 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "After 999 Slaps"
 label_settings = SubResource("LabelSettings_kek77")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SinRotateParent" type="Node" parent="GameOverLabel" unique_id=780548185]
 script = ExtResource("5_lquwl")
@@ -201,6 +203,8 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "After 999 Slaps"
 label_settings = SubResource("LabelSettings_kek77")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SinRotateParent" type="Node" parent="YouWinLabel" unique_id=1482663082]
 script = ExtResource("5_lquwl")
