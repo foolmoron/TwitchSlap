@@ -27,8 +27,9 @@ var count_until_local_player := 0:
 @export_range(0.0, 2.0) var stun_time := 0.0
 @export_range(0.0, 2.0) var stun_time_max := 0.5
 @export_range(0.0, 2.0) var player_time_remaining := 0.0
-@export_range(0.0, 2.0) var player_time_max := 1.2
-@export_range(0.0, 2.0) var player_time_min := 0.3
+@export_range(0.0, 2.0) var player_time_max := 2.5
+@export_range(0.0, 2.0) var player_time_min := 0.25
+@export_range(0.0, 1.0) var time_decay := 0.85
 
 var state := State.Start
 var match_id := ""
@@ -139,7 +140,7 @@ func _reconcile_hits() -> void:
 		confirmed_hits[seat_id] = int(confirmed_hits.get(seat_id, 0)) + 1
 		replay_latest = seat_id
 		if seat_id == replay_alive.min():
-			replay_time_max = max(player_time_min, replay_time_max * 0.85)
+			replay_time_max = max(player_time_min, replay_time_max * time_decay)
 		replay_active = _next_in(seat_id, replay_alive)
 		replay_deadline = timestamp_ms + roundi(replay_time_max * 1000.0)
 
@@ -206,8 +207,8 @@ func get_player_confirmed_hits_count() -> int:
 	return int(_confirmed_hits_by_seat.get(player_local_id, 0))
 
 func _process(delta: float) -> void:
-	if stun_time > 0.0:
-		stun_time -= delta
+	if is_stunned():
+		stun_time = maxf(0.0, stun_time - delta)
 	if state != State.Playing or active_seat < 0:
 		return
 	player_time_remaining = maxf(0.0, float(active_deadline_ms - shared_now_ms()) / 1000.0)
@@ -227,7 +228,7 @@ func _input(event: InputEvent) -> void:
 		do_hit()
 
 func do_hit() -> void:
-	if stun_time > 0.0:
+	if is_stunned():
 		return
 	if active_seat != player_local_id:
 		do_stun()
@@ -236,6 +237,9 @@ func do_hit() -> void:
 
 func do_stun() -> void:
 	stun_time = stun_time_max
+
+func is_stunned() -> bool:
+	return stun_time > 0.0
 
 func _update_local_turn() -> void:
 	if player_local_id < 0 or not alive_seats.has(player_local_id) or active_seat < 0:
