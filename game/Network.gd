@@ -311,7 +311,9 @@ func send_local_hit() -> void:
 	if match_id.is_empty() or not GameManager.alive_seats.has(GameManager.player_local_id):
 		return
 	_local_hit_sequence += 1
-	var timestamp_ms := shared_now_ms()
+	# Send timestamps in the sender's local clock domain. The host converts
+	# remote timestamps with its measured offset in _submit_hit().
+	var timestamp_ms := unix_now_ms()
 	if multiplayer.is_server():
 		_accept_hit(1, _local_hit_sequence, timestamp_ms)
 	else:
