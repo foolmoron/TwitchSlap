@@ -9,7 +9,6 @@ var rotate_strength := 14
 enum Lang {
 	Decimal,
 	Roman,
-	Devanagari,
 	Kanji,
 }
 
@@ -29,8 +28,8 @@ var font_sizes_by_lang: Array[int] = [280, 280, 370, 340]
 				text = to_text_decimal(value)
 			Lang.Roman:
 				text = to_text_roman(value)
-			Lang.Devanagari:
-				text = to_text_devanagari(value)
+			# Lang.Devanagari:
+			# 	text = to_text_devanagari(value)
 			Lang.Kanji:
 				text = to_text_kanji(value)
 
@@ -54,7 +53,7 @@ func to_text_decimal(value: int) -> String:
 		value /= 10
 	return t
 
-# Devanagari
+# Devanagari (doesn't work with font)
 var nums_devanagari: Array[String] = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"]
 
 func to_text_devanagari(value: int) -> String:

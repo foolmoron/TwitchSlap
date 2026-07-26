@@ -49,6 +49,36 @@ font_size = 78
 outline_size = 34
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="FontVariation" id="FontVariation_s0q5u"]
+base_font = ExtResource("4_masxb")
+spacing_glyph = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_small"]
+font = SubResource("FontVariation_s0q5u")
+font_size = 32
+outline_size = 14
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_hqiu3"]
+base_font = ExtResource("4_masxb")
+spacing_glyph = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_lobby"]
+font = SubResource("FontVariation_hqiu3")
+font_size = 60
+outline_size = 24
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_masxb"]
+base_font = ExtResource("4_masxb")
+spacing_glyph = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_s0q5u"]
+font = SubResource("FontVariation_masxb")
+font_size = 42
+outline_size = 17
+outline_color = Color(0, 0, 0, 1)
+
 [node name="Start" type="Control" unique_id=2021619407]
 layout_mode = 3
 anchors_preset = 15
@@ -70,7 +100,7 @@ mouse_filter = 2
 script = ExtResource("3_hqiu3")
 rotation_speed = 4.31
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2035228469]
+[node name="Intro" type="VBoxContainer" parent="." unique_id=2035228469]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,7 +108,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=1361595761]
+[node name="TitleLabel" type="Label" parent="Intro" unique_id=1361595761]
 custom_minimum_size = Vector2(600, 500)
 layout_mode = 2
 text = "TWITCH
@@ -87,7 +117,7 @@ label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="CreditsLabel" type="Label" parent="VBoxContainer" unique_id=855533707]
+[node name="CreditsLabel" type="Label" parent="Intro" unique_id=855533707]
 custom_minimum_size = Vector2(600, 100)
 layout_mode = 2
 text = "by Momin Khan @foolmoron
@@ -96,30 +126,51 @@ label_settings = SubResource("LabelSettings_y5hus")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StartLabel" type="Label" parent="VBoxContainer" unique_id=745179601]
+[node name="StartLabel" type="Label" parent="Intro" unique_id=745179601]
 custom_minimum_size = Vector2(600, 500)
 layout_mode = 2
 offset_transform_enabled = true
-text = "TAP TO START"
+text = "TAP TO HOST GAME"
 label_settings = SubResource("LabelSettings_1n0d2")
 horizontal_alignment = 1
 vertical_alignment = 2
 autowrap_mode = 2
 
-[node name="QRCodeRect" type="TextureRect" parent="." unique_id=2104476961]
+[node name="SessionLabel" type="Label" parent="Intro" unique_id=148365858]
+layout_mode = 2
+text = "SESSION"
+label_settings = SubResource("LabelSettings_small")
+horizontal_alignment = 1
+
+[node name="Lobby" type="VBoxContainer" parent="." unique_id=615098791]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -250.0
-offset_right = 250.0
-offset_bottom = 250.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 55.0
+offset_right = -50.0
+offset_bottom = -55.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset_ratio = Vector2(0.5, 0.5)
+alignment = 1
+
+[node name="PlayersLabel" type="Label" parent="Lobby" unique_id=1386867365]
+custom_minimum_size = Vector2(0, 163.12)
+layout_mode = 2
+text = "Players ready: 10/11"
+label_settings = SubResource("LabelSettings_lobby")
+horizontal_alignment = 1
+
+[node name="QRInstructionLabel" type="Label" parent="Lobby" unique_id=1068011983]
+layout_mode = 2
+text = "Get others to join by scanning the code"
+label_settings = SubResource("LabelSettings_small")
+horizontal_alignment = 1
+
+[node name="QRCodeRect" type="TextureRect" parent="Lobby" unique_id=2104476961]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 script = ExtResource("5_s0q5u")
@@ -134,3 +185,23 @@ light_module_color = Color(1, 1, 1, 1)
 dark_module_color = Color(0, 0, 0, 1)
 auto_module_size = true
 quiet_zone_size = 1
+
+[node name="InstructionsLabel" type="Label" parent="Lobby" unique_id=1940466544]
+custom_minimum_size = Vector2(100, 469.22)
+layout_mode = 2
+text = "Hold thumb on screen to start game. You must never release your thumb while playing the game!!
+
+Twitch your phone lightly but quickly when the countdown reaches your turn. Last one standing wins."
+label_settings = SubResource("LabelSettings_small")
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2
+
+[node name="StatusLabel" type="Label" parent="Lobby" unique_id=1148830291]
+custom_minimum_size = Vector2(100, 146.42)
+layout_mode = 2
+text = "Hold your thumb!"
+label_settings = SubResource("LabelSettings_s0q5u")
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2
