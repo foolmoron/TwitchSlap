@@ -220,12 +220,10 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if state != State.Playing:
 		return
-	var pressed: bool = (
-		(event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed)
-		or (event is InputEventScreenTouch and event.pressed)
-	)
-	if pressed:
-		do_hit()
+	if OS.get_name() != "Web":
+		var pressed: bool = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed
+		if pressed:
+			do_hit()
 
 func do_hit() -> void:
 	if is_stunned():
