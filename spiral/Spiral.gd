@@ -20,7 +20,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	var progression := max(0.1, (GameManager.player_time_max / time_max_orig)) as float
-	var rot_speed = 0.0 if GameManager.count_until_local_player == 0 else rotation_speed
+	var rot_speed = 0.0 if GameManager.state == GameManager.State.Playing and GameManager.count_until_local_player == 0 else rotation_speed
 	rot = fmod(rot + rot_speed * pow(1 / progression, 0.5) * delta, TAU)
 	shader.set_shader_parameter("rotation", rot)
 	shader.set_shader_parameter("drain", 1.0 - (GameManager.player_time_remaining / GameManager.player_time_max))

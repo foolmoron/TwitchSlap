@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="TwitchSlap"
-run/main_scene="uid://3o8bjkp5hrrd"
+run/main_scene="res://start/start.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 

@@ -42,7 +42,7 @@ func _ready() -> void:
 	GameManager.on_hit.connect(func():
 		lang = (lang + randi_range(1, Lang.size() - 1)) % Lang.size() as Lang
 	)
-	num_current = num_current
+	num_current = GameManager.count_until_local_player
 
 # Decimal
 var nums_decimal: Array[String] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]

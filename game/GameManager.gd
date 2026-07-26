@@ -5,6 +5,7 @@ signal on_hit()
 signal on_change_state(is_game_over: bool)
 
 enum State {
+	Start,
 	Playing,
 	GameOver,
 	YouWin,
@@ -33,13 +34,10 @@ var count_until_local_player := 0:
 @export_range(0.0, 2.0) var player_time_max := 1.2
 @export_range(0.0, 2.0) var player_time_min := 0.3
 
-var state := State.Playing
+var state := State.Start
 
 func _ready() -> void:
 	player_latest_hit = player_local_id
-	await get_tree().create_timer(0).timeout
-	player_latest_hit = player_local_id
-	on_change_state.emit(state)
 
 func _process(delta: float) -> void:
 	if state != State.Playing:

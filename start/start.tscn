@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://bmrsnbqjqro20"]
+
+[ext_resource type="Script" uid="uid://mq046gh005ou" path="res://start/Start.gd" id="1_k11ym"]
+[ext_resource type="Shader" uid="uid://yfour8f1ufgr" path="res://spiral/bg.gdshader" id="2_s0q5u"]
+[ext_resource type="Script" uid="uid://db8tyiy1x4e3n" path="res://spiral/Spiral.gd" id="3_hqiu3"]
+[ext_resource type="FontFile" uid="uid://bywdpnr1vi5nf" path="res://assets/MochiyPopOne-Regular.ttf" id="4_masxb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_spiral"]
+shader = ExtResource("2_s0q5u")
+shader_parameter/background_color = Color(1, 1, 1, 1)
+shader_parameter/spiral_color = Color(0.95, 0.08, 0.55, 1)
+shader_parameter/border_color = Color(0, 0, 0, 1)
+shader_parameter/rotation = 0.0
+shader_parameter/arms = 1.0
+shader_parameter/twist = 60.0
+shader_parameter/softness = 0.00999999977648
+shader_parameter/thickness = 0.6999999843536
+shader_parameter/border_thickness = 0.0999999977648
+shader_parameter/scale = 0.6999999899416001
+shader_parameter/drain = 0.0
+
+[sub_resource type="FontVariation" id="FontVariation_title"]
+base_font = ExtResource("4_masxb")
+spacing_glyph = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+line_spacing = -24.0
+font = SubResource("FontVariation_title")
+font_size = 123
+outline_size = 58
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_1n0d2"]
+base_font = ExtResource("4_masxb")
+spacing_glyph = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_y5hus"]
+line_spacing = 8.6
+font = SubResource("FontVariation_1n0d2")
+font_size = 24
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_1n0d2"]
+line_spacing = -8.85
+font = SubResource("FontVariation_title")
+font_size = 78
+outline_size = 34
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Start" type="Control" unique_id=2021619407]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k11ym")
+
+[node name="Spiral" type="ColorRect" parent="." unique_id=1972057944]
+material = SubResource("ShaderMaterial_spiral")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_hqiu3")
+rotation_speed = 4.31
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2035228469]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=1361595761]
+custom_minimum_size = Vector2(600, 500)
+layout_mode = 2
+text = "TWITCH
+SLAP"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="CreditsLabel" type="Label" parent="VBoxContainer" unique_id=855533707]
+custom_minimum_size = Vector2(600, 100)
+layout_mode = 2
+text = "by Momin Khan @foolmoron
+for GMTK 2026 w/ RVA Game Jams"
+label_settings = SubResource("LabelSettings_y5hus")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartLabel" type="Label" parent="VBoxContainer" unique_id=745179601]
+custom_minimum_size = Vector2(600, 500)
+layout_mode = 2
+offset_transform_enabled = true
+text = "TAP TO START"
+label_settings = SubResource("LabelSettings_1n0d2")
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2
