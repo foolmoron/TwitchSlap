@@ -56,6 +56,7 @@ var _confirmed_hits_by_seat: Dictionary = {}
 var _hit_events: Array[Dictionary] = []
 var _accepted_hit_keys: Dictionary = {}
 var _pending_local_timeout := false
+var _touch_released := false
 
 func _ready() -> void:
 	background_music.name = "BGM"
@@ -98,6 +99,7 @@ func configure_match(
 	_hit_events.clear()
 	_accepted_hit_keys.clear()
 	_pending_local_timeout = false
+	_touch_released = false
 	stun_time = 0.0
 	_update_local_turn()
 	change_state(State.Playing)
@@ -220,7 +222,9 @@ func get_player_confirmed_hits_count() -> int:
 	return int(_confirmed_hits_by_seat.get(player_local_id, 0))
 
 func _process(delta: float) -> void:
-	if is_stunned():
+	if _touch_released:
+		stun_time = stun_time_max
+	elif is_stunned():
 		stun_time = maxf(0.0, stun_time - delta)
 	if state != State.Playing or active_seat < 0:
 		return
@@ -239,21 +243,13 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if state != State.Playing:
 		return
-
-	if event is InputEventScreenTouch and event.pressed:
-		do_hit()
-		get_viewport().set_input_as_handled()
+	if event is InputEventScreenTouch:
+		_touch_released = not event.pressed
 		return
-
-	# Touchscreens can emit a synthetic mouse click after a tap. Ignore that
-	# emulated event so a single tap cannot register as two hits.
-	if (
-		event is InputEventMouseButton
-		and event.button_index == MOUSE_BUTTON_LEFT
-		and event.pressed
-		and event.device >= 0
-	):
-		do_hit()
+	if OS.get_name() != "Web":
+		var pressed: bool = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed
+		if pressed:
+			do_hit()
 
 func do_hit() -> void:
 	if is_stunned():
