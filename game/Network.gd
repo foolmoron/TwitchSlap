@@ -355,6 +355,10 @@ func report_local_timeout(deadline_ms: int) -> void:
 	else:
 		_submit_timeout.rpc_id(1, match_id, deadline_ms)
 
+func confirm_host_timeout(seat_id: int, deadline_ms: int) -> void:
+	if multiplayer.is_server() and not match_id.is_empty():
+		_wait_to_confirm_timeout(seat_id, deadline_ms)
+
 @rpc("any_peer", "call_remote", "reliable")
 func _submit_timeout(event_match_id: String, deadline_ms: int) -> void:
 	if not multiplayer.is_server() or event_match_id != match_id:

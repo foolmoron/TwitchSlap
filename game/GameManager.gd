@@ -225,10 +225,16 @@ func _process(delta: float) -> void:
 	if state != State.Playing or active_seat < 0:
 		return
 	player_time_remaining = maxf(0.0, float(active_deadline_ms - shared_now_ms()) / 1000.0)
-	if active_seat == player_local_id and player_time_remaining <= 0.0 and not _pending_local_timeout:
+	if player_time_remaining <= 0.0 and not _pending_local_timeout:
 		_pending_local_timeout = true
-		change_state(State.GameOver)
-		Network.report_local_timeout(active_deadline_ms)
+		if active_seat == player_local_id:
+			change_state(State.GameOver)
+			Network.report_local_timeout(active_deadline_ms)
+		elif multiplayer.is_server():
+			# The host is the final authority on every turn timeout. Do not rely
+			# solely on the active client, which may disconnect or lose its RPC
+			# after displaying Game Over.
+			Network.confirm_host_timeout(active_seat, active_deadline_ms)
 
 func _input(event: InputEvent) -> void:
 	if state != State.Playing:
